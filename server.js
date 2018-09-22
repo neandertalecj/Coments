@@ -8,16 +8,24 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.get('/content', (req, res) => res.sendFile(__dirname + './public/content.txt'));
+// app.get('/coment', (req, res) => res.sendFile(__dirname + './content.txt'));
 
 // parse application/json
 app.use(bodyParser.json());
 
-app.post('/content', (req, res) => {
-	// fs.writeFile('./public/content.txt', req.body, console.log(req.body));
+app.post('/coment', (req, res) => {
 	console.log(req.body);
-	// console.log(JSON.parse(req.body));
-	res.sendStatus(200);
+  fs.writeFile('coment.txt', req.body.text, (err) => {
+    if (err) throw err;
+    console.log('It\'s saved!');
+  });
+  fs.readFile('coment.txt', 'utf8', (err, data) => {
+    console.log(data)
+
+    res.send(JSON.stringify({text:data}));
+  });
+
+	// res.sendStatus(200);
 });
 
 const port = process.env.PORT || 3000;
