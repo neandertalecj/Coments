@@ -21,7 +21,10 @@ function sendToServer(com) {
 
 	console.log(data);
 
-	const header = new Headers();
+	const header = new Headers({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  });
 
 	const init = {
 		method: 'POST',
