@@ -1,1 +1,1 @@
-Hello, my friend! It`s realy working
+We sending {text}

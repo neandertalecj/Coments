@@ -10,6 +10,10 @@ function sub(e) {
   e.preventDefault();
 	const com = document.getElementsByTagName('form')[0].elements[0].value;
 	const messErr = document.getElementById('messErr');
+
+  // const com = e.target;
+  // console.log(com);
+
 	if (com === '') {
 		messErr.innerHTML = 'Enter some text? please!';
     return;
@@ -20,12 +24,15 @@ function sub(e) {
 	// console.log(com);
 	sendToServer(com);
   document.getElementsByTagName('form')[0].elements[0].value = '';
+
+  // e.target.reset();
+
 }
 
-function sendToServer(com) {
-	const data ={
-		text: com
-	}
+function sendToServer(text) {
+	// const data ={
+	// 	text: com
+	// }
 
 	const header = new Headers({
     'Accept': 'application/json',
@@ -35,7 +42,7 @@ function sendToServer(com) {
 	const init = {
 		method: 'POST',
 		headers: header,
-		body: JSON.stringify(data)
+		body: JSON.stringify({text})
 	}
 
 	const request = new Request('/coment', init);
