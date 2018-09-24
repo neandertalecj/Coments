@@ -8,23 +8,30 @@ const app = express();
 
 app.use(express.static('public'));
 
-// app.get('/coment', (req, res) => res.sendFile(__dirname + './content.txt'));
+function readTxt(req, res) {
+  fs.readFile('coment.txt', 'utf8', (err, text) => {
+    const arrTxt = text.split('<s>').slice(0, -1);
+    console.log(arrTxt);
+    res.send(JSON.stringify({text: arrTxt}));
+  });
+}
+
+app.get('/coment', (req, res) => {
+  readTxt(req, res);
+})
 
 // parse application/json
 app.use(bodyParser.json());
 
 app.post('/coment', (req, res) => {
-	console.log(req.body);
-  fs.writeFile('coment.txt', req.body.text, (err) => {
+  console.log(req.body);
+  let txt = `${req.body.text}<s>`
+  fs.appendFile('coment.txt', txt, (err) => {
     if (err) throw err;
     console.log('It\'s saved!');
+    // Описуємо в колбеку readFile бо АСИНХРОНО... !!!
+    readTxt(req, res);
   });
-  fs.readFile('coment.txt', 'utf8', (err, data) => {
-    console.log(data)
-
-    res.send(JSON.stringify({text:data}));
-  });
-
 	// res.sendStatus(200);
 });
 

@@ -4,6 +4,33 @@
 const content = document.getElementById('content');
 const bt = document.getElementById('bt');
 
+function checkLengLi() {
+	let lengTgLi = document.getElementsByTagName('li').length
+	console.log(lengTgLi);
+	if ( lengTgLi > 0 ) {
+		lengTgLi -= 1;
+		console.log(lengTgLi);
+	}
+	return lengTgLi;
+}
+
+function renderLi(res, startPost) {
+	if (startPost != 0 || startPost != undefined) {
+		var arr = res.text.slice(startPost);
+	}
+
+	var arrTxt = arr.map( function(item, i) {
+		let li = document.createElement("li");
+		li.innerHTML = arr[i];
+		content.appendChild(li);
+	})
+}
+
+fetch('/coment')
+	.then((res) => res.json())
+	.then((res) => renderLi(res))
+		.catch((err) => console.log(err))
+
 bt.addEventListener('click', sub);
 
 function sub(e) {
@@ -21,7 +48,7 @@ function sub(e) {
 			messErr.innerHTML = '';
 
 	}
-	// console.log(com);
+	console.log(com);
 	sendToServer(com);
   document.getElementsByTagName('form')[0].elements[0].value = '';
 
@@ -50,10 +77,10 @@ function sendToServer(text) {
 	fetch(request)
 		.then((res) => res.json() )
 		.then((res) => {
-      // console.log(res.text);
-      let li = document.createElement("li");
-      li.innerHTML = res.text;
-      content.appendChild(li);
+			console.log(res.text);
+			
+			renderLi(res, checkLengLi());
+
     } )
 		.catch((err) => console.log(err))
 }
